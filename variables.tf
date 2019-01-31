@@ -42,10 +42,12 @@ variable init_script {
 }
 
 variable in_open_ports {
+  type = "list"
   default = []
 }
 
 variable in_cidr_blocks {
+  type = "list"
   default = ["0.0.0.0/0"]
 }
 
