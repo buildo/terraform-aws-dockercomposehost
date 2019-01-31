@@ -49,6 +49,12 @@ variable in_cidr_blocks {
   default = ["0.0.0.0/0"]
 }
 
+variable in_source_security_group {
+  description = "Security group to receive SSH access"
+  type = "string"
+  default = ""
+}
+
 variable disk_utilization_alarm_threshold {
   description = "disk occupation alarm threshold (% of disk utilization)"
   default = "80"
