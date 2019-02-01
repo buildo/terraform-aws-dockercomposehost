@@ -42,11 +42,19 @@ variable init_script {
 }
 
 variable in_open_ports {
+  type = "list"
   default = []
 }
 
 variable in_cidr_blocks {
+  type = "list"
   default = ["0.0.0.0/0"]
+}
+
+variable in_source_security_group {
+  description = "Security group to receive SSH access"
+  type = "string"
+  default = ""
 }
 
 variable disk_utilization_alarm_threshold {
