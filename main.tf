@@ -69,7 +69,7 @@ resource "aws_instance" "instance" {
 
   provisioner "remote-exec" {
     inline = [
-      "docker login quay.io -u dontspamus -p ${var.quay_password}",
+      "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
       "docker run -itd --restart always quay.io/buildo/bellosguardo:${var.bellosguardo_target}",
       "./init.sh"

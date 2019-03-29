@@ -32,6 +32,11 @@ variable host_name {
   description = "DNS host name"
 }
 
+variable quay_username {
+  description = "Quay username"
+  default = "dontspamus"
+}
+
 variable quay_password {
   description = "Quay password"
 }
