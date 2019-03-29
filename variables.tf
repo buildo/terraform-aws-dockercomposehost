@@ -26,10 +26,12 @@ variable ssh_key_name {
 
 variable zone_id {
   description = "Route53 Zone ID"
+  default = ""
 }
 
 variable host_name {
   description = "DNS host name"
+  default = ""
 }
 
 variable quay_username {

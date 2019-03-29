@@ -106,6 +106,8 @@ variable "bellosguardo_sns_topic_arn" {
 }
 
 resource "aws_route53_record" "dns" {
+  count = "${length(var.zone_id) > 0 && length(var.host_name) > 0 ? 1 : 0}"
+
   zone_id = "${var.zone_id}"
   name = "${var.host_name}"
   type = "A"
