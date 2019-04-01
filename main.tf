@@ -69,7 +69,7 @@ resource "aws_instance" "instance" {
 
   provisioner "remote-exec" {
     inline = [
-      "docker login quay.io -u dontspamus -p ${var.quay_password}",
+      "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
       "docker run -itd --restart always quay.io/buildo/bellosguardo:${var.bellosguardo_target}",
       "./init.sh"
@@ -106,6 +106,8 @@ variable "bellosguardo_sns_topic_arn" {
 }
 
 resource "aws_route53_record" "dns" {
+  count = "${length(var.zone_id) > 0 && length(var.host_name) > 0 ? 1 : 0}"
+
   zone_id = "${var.zone_id}"
   name = "${var.host_name}"
   type = "A"

@@ -31,16 +31,22 @@ resource "aws_security_group_rule" "out_all" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 
+locals {
+  not_ssh_open_ports = "${distinct(compact(
+    split(",", replace(join(",", var.in_open_ports), "/,22,|^22,|,22$|^22$|,22-22,|^22-22,|,22-22$|^22-22$/", ","))
+  ))}"
+}
+
 resource "aws_security_group_rule" "custom_ports" {
-  count = "${length(var.in_open_ports)}"
+  count = "${length(local.not_ssh_open_ports)}"
   type = "ingress"
   protocol = "tcp"
   security_group_id = "${aws_security_group.sg.id}"
-  from_port = "${2 == length(split("-", element(var.in_open_ports, count.index))) ?
-      element(split("-", element(var.in_open_ports, count.index)), 0) :
-      element(var.in_open_ports, count.index) }"
-  to_port = "${2 == length(split("-", element(var.in_open_ports, count.index))) ?
-      element(split("-", element(var.in_open_ports, count.index)), 1) :
-      element(var.in_open_ports, count.index) }"
+  from_port = "${2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ?
+      element(split("-", element(local.not_ssh_open_ports, count.index)), 0) :
+      element(local.not_ssh_open_ports, count.index) }"
+  to_port = "${2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ?
+      element(split("-", element(local.not_ssh_open_ports, count.index)), 1) :
+      element(local.not_ssh_open_ports, count.index) }"
   cidr_blocks = "${var.in_cidr_blocks}"
 }
