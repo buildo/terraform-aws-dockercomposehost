@@ -70,3 +70,8 @@ variable disk_utilization_alarm_threshold {
   type        = number
   default     = 0
 }
+
+variable "sns_topic_arn" {
+  type    = string
+  default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
+}
