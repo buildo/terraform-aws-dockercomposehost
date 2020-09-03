@@ -51,7 +51,7 @@ resource "aws_instance" "instance" {
       "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
       "./init.sh",
-      "docker-compose up -d"
+      "sudo docker-compose up -d"
     ]
   }
 }

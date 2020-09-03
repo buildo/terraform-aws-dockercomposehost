@@ -17,3 +17,8 @@ These resources are created if their variable is set
 | A CloudWatch Alarm for disk space utilization | disk_utilization_alarm_threshold |
 | A Route53 record | zone_id && host_name |
 |   |   |
+
+## Ideas
+
+- Make the provision of copy-and-execute init.sh only if set from variable
+- Isn't better to have directly an AMI built with something (Packer?) with docker and docker-compose installed?
