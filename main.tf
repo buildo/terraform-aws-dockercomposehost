@@ -74,9 +74,14 @@ resource "aws_route53_record" "dns" {
   records = [aws_instance.instance.public_ip]
 }
 
-data "aws_iam_role_policy" "cloudwatch_policy" {
-  role = aws_iam_role.cloudwatch_role.id
-  arn  = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+data "aws_iam_policy" "cloudwatch_policy" {
+  arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_role_policy" "cloudwatch_role_policy" {
+  name   = data.aws_iam_policy.cloudwatch_policy.name
+  policy = data.aws_iam_policy.cloudwatch_policy.policy
+  role   = aws_iam_role.cloudwatch_role.id
 }
 
 resource "aws_iam_role" "cloudwatch_role" {
@@ -116,9 +121,9 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = [var.sns_topic_arn]
-  ok_actions          = [var.sns_topic_arn]
-  treat_missing_data  = "breaching"
+  # alarm_actions       = [var.sns_topic_arn]
+  # ok_actions          = [var.sns_topic_arn]
+  treat_missing_data = "breaching"
 
   dimensions = {
     InstanceId = aws_instance.instance.id
