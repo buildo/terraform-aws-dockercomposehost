@@ -34,7 +34,7 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "file" {
-    source      = coalesce(var.cloudwatch_config_json "${path.module}/cwagentconfig.json")
+    source      = coalesce(var.cloudwatch_config_json, "${path.module}/cwagentconfig.json")
     destination = "~/cwagentconfig"
   }
 
@@ -76,6 +76,7 @@ resource "aws_route53_record" "dns" {
 
 resource "aws_iam_role" "cloudwatch_role" {
   name = "${var.project_name}-ec2-cloudwatch-role"
+  force_detach_policies = true
 
   assume_role_policy = jsonencode(
     {
