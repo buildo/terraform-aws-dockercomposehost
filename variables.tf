@@ -75,3 +75,8 @@ variable "sns_topic_arn" {
   type    = string
   default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
 }
+
+variable "cloudwatch_config_json" {
+  type    = string
+  default = ""
+}

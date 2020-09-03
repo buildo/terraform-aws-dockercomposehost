@@ -31,6 +31,27 @@ module "aws-dockercomposehost" {
 
 ```
 
+By default a custom cloud watch configuration will be used.
+If you want to specify a different one, just give a value to the variable `var.cloudwatch_config_json`
+
+Example:
+
+```hcl
+module "aws-dockercomposehost" {
+  source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git?ref=9-terraform_0_13"
+
+  project_name    = "project-name"
+  ssh_key_name    = "existing-key"
+  ssh_private_key = "~/.ssh/id_rsa_aws"
+
+  quay_password = ""
+
+  in_open_ports = [80]
+
+  cloudwatch_config_json = file("cwagentconfig.json")
+}
+```
+
 ## Resources
 
 These resources are always created:

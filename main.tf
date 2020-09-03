@@ -34,7 +34,7 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/cwagentconfig.json"
+    source      = coalesce(var.cloudwatch_config_json "${path.module}/cwagentconfig.json")
     destination = "~/cwagentconfig"
   }
 
