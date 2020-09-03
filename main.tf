@@ -18,7 +18,7 @@ resource "aws_instance" "instance" {
   security_groups             = [aws_security_group.sg.name]
   associate_public_ip_address = true
 
-  tags {
+  tags = {
     Name = var.project_name
   }
 
