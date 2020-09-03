@@ -74,8 +74,14 @@ resource "aws_route53_record" "dns" {
   records = [aws_instance.instance.public_ip]
 }
 
+data "aws_iam_role_policy" "cloudwatch_policy" {
+  role = aws_iam_role.cloudwatch_role.id
+  arn  = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
 resource "aws_iam_role" "cloudwatch_role" {
   name = "${var.project_name}-ec2-cloudwatch-role"
+
   force_detach_policies = true
 
   assume_role_policy = jsonencode(
