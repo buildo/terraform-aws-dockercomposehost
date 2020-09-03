@@ -2,6 +2,35 @@
 
 Terraform module for creating AWS EC2 instances with Docker and Docker Compose installed.
 
+## Example
+
+docker-compose.yml:
+```yaml
+version: '3'
+
+services:
+  hello:
+    image: nginxdemos/hello
+    ports:
+      - "80:80"
+```
+
+main.tf:
+```hcl
+module "aws-dockercomposehost" {
+  source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git?ref=9-terraform_0_13"
+
+  project_name    = "project-name"
+  ssh_key_name    = "existing-key"
+  ssh_private_key = "~/.ssh/id_rsa_aws"
+
+  quay_password = ""
+
+  in_open_ports = [80]
+}
+
+```
+
 ## Resources
 
 These resources are always created:
