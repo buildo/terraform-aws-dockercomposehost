@@ -43,17 +43,6 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "remote-exec" {
-    inline = [
-      "mkdir -p ~/config"
-    ]
-  }
-
-  provisioner "file" {
-    source      = "${path.cwd}/config/"
-    destination = "~/config/"
-  }
-
-  provisioner "remote-exec" {
     script = "${path.module}/docker-install.sh"
   }
 
@@ -61,7 +50,8 @@ resource "aws_instance" "instance" {
     inline = [
       "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
-      "./init.sh"
+      "./init.sh",
+      "docker-compose up -d"
     ]
   }
 }
