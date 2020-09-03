@@ -6,7 +6,9 @@ Terraform module for creating AWS EC2 instances with Docker and Docker Compose i
 
 These resources are always created:
 - A EC2 instance
-- A Security Group with open ports specified by variable in_open_ports plus port 22/tcp
+- A Security Group
+    - A Security Group Rule for port 22/tcp
+    - A Security Group Rule for each port / port range specified in variable `in_open_ports`
 
 These resources are created if their variable is set
 

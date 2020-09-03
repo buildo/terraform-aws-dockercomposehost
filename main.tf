@@ -27,6 +27,7 @@ resource "aws_instance" "instance" {
   }
 
   connection {
+    host        = self.public_ip
     user        = "ubuntu"
     private_key = file(var.ssh_private_key)
   }
@@ -66,7 +67,7 @@ resource "aws_instance" "instance" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk-full" {
-  count               = disk_utilization_alarm_threshold == 0 ? 0 : 1
+  count               = var.disk_utilization_alarm_threshold == 0 ? 0 : 1
   alarm_name          = "${var.project_name}-${aws_instance.instance.id}-disk-full"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -79,7 +80,8 @@ resource "aws_cloudwatch_metric_alarm" "disk-full" {
   alarm_actions       = [var.bellosguardo_sns_topic_arn]
   ok_actions          = [var.bellosguardo_sns_topic_arn]
   treat_missing_data  = "breaching"
-  dimensions {
+
+  dimensions = {
     InstanceId = aws_instance.instance.id
     MountPath  = "/"
     Filesystem = "overlay"
