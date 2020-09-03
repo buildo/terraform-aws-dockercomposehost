@@ -3,7 +3,7 @@ data "aws_ami" "ami" {
   owners      = ["099720109477"]
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
   filter {
     name   = "virtualization-type"
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "disk-full" {
   namespace           = "System/Linux"
   period              = "60"
   statistic           = "Average"
-  threshold           = "${var.disk_utilization_alarm_threshold}"
+  threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
   alarm_actions       = [lookup(var.bellosguardo_sns_topic_arn, var.bellosguardo_target)]
   ok_actions          = [lookup(var.bellosguardo_sns_topic_arn, var.bellosguardo_target)]
@@ -98,7 +98,7 @@ resource "aws_cloudwatch_metric_alarm" "disk-full" {
 }
 
 variable "bellosguardo_sns_topic_arn" {
-  type = "map"
+  type = map
   default = {
     buildo  = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
     omnilab = "arn:aws:sns:eu-west-1:143727521720:bellosguardo"

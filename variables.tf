@@ -49,18 +49,18 @@ variable init_script {
 }
 
 variable in_open_ports {
-  type    = "list"
+  type    = list
   default = []
 }
 
 variable in_cidr_blocks {
-  type    = "list"
+  type    = list
   default = ["0.0.0.0/0"]
 }
 
 variable in_source_security_group {
   description = "Security group to receive SSH access"
-  type        = "string"
+  type        = string
   default     = ""
 }
 
