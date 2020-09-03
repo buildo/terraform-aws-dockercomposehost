@@ -42,11 +42,7 @@ resource "aws_security_group_rule" "custom_ports" {
   type              = "ingress"
   protocol          = "tcp"
   security_group_id = aws_security_group.sg.id
-  from_port = "${2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ?
-    element(split("-", element(local.not_ssh_open_ports, count.index)), 0) :
-  element(local.not_ssh_open_ports, count.index)}"
-  to_port = "${2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ?
-    element(split("-", element(local.not_ssh_open_ports, count.index)), 1) :
-  element(local.not_ssh_open_ports, count.index)}"
-  cidr_blocks = var.in_cidr_blocks
+  from_port         = 2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ? element(split("-", element(local.not_ssh_open_ports, count.index)), 0) : element(local.not_ssh_open_ports, count.index)
+  to_port           = 2 == length(split("-", element(local.not_ssh_open_ports, count.index))) ? element(split("-", element(local.not_ssh_open_ports, count.index)), 1) : element(local.not_ssh_open_ports, count.index)
+  cidr_blocks       = var.in_cidr_blocks
 }
