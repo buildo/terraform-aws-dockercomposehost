@@ -44,8 +44,9 @@ variable quay_password {
 }
 
 variable init_script {
-  description = "bash code executed before `docker-compose up -d` is called. Example: file(\"init.sh\")"
-  default     = ""
+  description = "Script executed before `docker-compose up -d` is called. Example: file(\"init.sh\")"
+  # See how hashicorp doesn't live in reality: https://github.com/hashicorp/terraform/issues/16380
+  default = "echo Setup Completed"
 }
 
 variable in_open_ports {
