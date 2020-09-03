@@ -3,7 +3,7 @@ variable project_name {
 }
 
 variable instance_type {
-  default = "t2.micro"
+  default = "t3.nano"
 }
 
 variable ami {
@@ -44,7 +44,7 @@ variable quay_password {
 }
 
 variable init_script {
-  description = "bash code executed before `docker-compose up -d` is called, example: `file(\"init.sh\")"
+  description = "bash code executed before `docker-compose up -d` is called. Example: file(\"init.sh\")"
   default     = ""
 }
 
@@ -65,10 +65,7 @@ variable in_source_security_group {
 }
 
 variable disk_utilization_alarm_threshold {
-  description = "disk occupation alarm threshold (% of disk utilization)"
-  default     = "80"
-}
-
-variable bellosguardo_target {
-  description = "Possible values are 'buildo', 'omnilab'"
+  description = "Disk occupation alarm threshold (% of disk utilization), for example 80.\nIf not set, the alarm won't be created"
+  type        = number
+  default     = 0
 }

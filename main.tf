@@ -53,31 +53,20 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get install -y apt-transport-https ca-certificates",
-      "sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-      "echo \"deb https://apt.dockerproject.org/repo ubuntu-xenial main\" | sudo tee /etc/apt/sources.list.d/docker.list",
-      "sudo apt-get update",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o DPkg::options::=\"--force-confdef\" -o DPkg::options::=\"--force-confold\"",
-      "sudo apt-get install -y docker-engine",
-      "sudo service docker start",
-      "sudo usermod -aG docker $USER",
-      "sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
-      "sudo chmod +x /usr/local/bin/docker-compose"
-    ]
+    script = "${path.module}/docker-install.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
       "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
-      "docker run -itd --restart always quay.io/buildo/bellosguardo:${var.bellosguardo_target}",
       "./init.sh"
     ]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk-full" {
+  count               = disk_utilization_alarm_threshold == 0 ? 0 : 1
   alarm_name          = "${var.project_name}-${aws_instance.instance.id}-disk-full"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -87,8 +76,8 @@ resource "aws_cloudwatch_metric_alarm" "disk-full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = [lookup(var.bellosguardo_sns_topic_arn, var.bellosguardo_target)]
-  ok_actions          = [lookup(var.bellosguardo_sns_topic_arn, var.bellosguardo_target)]
+  alarm_actions       = [var.bellosguardo_sns_topic_arn]
+  ok_actions          = [var.bellosguardo_sns_topic_arn]
   treat_missing_data  = "breaching"
   dimensions {
     InstanceId = aws_instance.instance.id
@@ -98,11 +87,8 @@ resource "aws_cloudwatch_metric_alarm" "disk-full" {
 }
 
 variable "bellosguardo_sns_topic_arn" {
-  type = map
-  default = {
-    buildo  = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
-    omnilab = "arn:aws:sns:eu-west-1:143727521720:bellosguardo"
-  }
+  type    = string
+  default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
 }
 
 resource "aws_route53_record" "dns" {
