@@ -34,15 +34,6 @@ variable host_name {
   default     = ""
 }
 
-variable quay_username {
-  description = "Quay username"
-  default     = "dontspamus"
-}
-
-variable quay_password {
-  description = "Quay password"
-}
-
 variable in_open_ports {
   type    = list
   default = []

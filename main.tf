@@ -50,8 +50,7 @@ resource "aws_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv ~/cwagentconfig /etc/cwagentconfig",
-      "sudo docker run -d -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent",
-      "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}"
+      "sudo docker run -d -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
     ]
   }
 }
