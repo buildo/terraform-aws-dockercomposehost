@@ -1,5 +1,5 @@
 resource "aws_security_group" "sg" {
-  name = var.project_name
+  name = "sg-${var.project_name}"
 }
 
 resource "aws_security_group_rule" "ssh_cidr" {
