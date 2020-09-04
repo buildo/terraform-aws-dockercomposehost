@@ -38,11 +38,6 @@ resource "aws_instance" "instance" {
     destination = "~/cwagentconfig"
   }
 
-  provisioner "file" {
-    content     = var.init_script
-    destination = "~/init.sh"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
@@ -56,9 +51,7 @@ resource "aws_instance" "instance" {
     inline = [
       "sudo mv ~/cwagentconfig /etc/cwagentconfig",
       "sudo docker run -d -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent",
-      "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
-      "chmod +x ./init.sh",
-      "./init.sh"
+      "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}"
     ]
   }
 }
