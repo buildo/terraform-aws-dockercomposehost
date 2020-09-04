@@ -115,8 +115,8 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = var.sns_alarm_enabled==true ? [var.sns_topic_arn] : []
-  ok_actions          = var.sns_alarm_enabled==true ? [var.sns_topic_arn] : []
+  alarm_actions       = var.sns_alarm_enabled==true ? [var.sns_topic_alarm_arn] : []
+  ok_actions          = var.sns_alarm_enabled==true ? [var.sns_topic_alarm_arn] : []
   treat_missing_data  = "breaching"
 
   dimensions = {
