@@ -34,13 +34,8 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "file" {
-    source      = coalesce(var.cloudwatch_config_json, "${path.module}/cwagentconfig.json")
+    source      = coalesce(var.cloudwatch_agent_config, "${path.module}/cwagentconfig.json")
     destination = "~/cwagentconfig"
-  }
-
-  provisioner "file" {
-    content     = file("docker-compose.yml")
-    destination = "~/docker-compose.yml"
   }
 
   provisioner "file" {
@@ -49,6 +44,12 @@ resource "aws_instance" "instance" {
   }
 
   provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get -y upgrade",
+      "sudo apt-get install -y docker.io docker-compose",
+      "sudo usermod -aG docker $USER"
+    ]
     script = "${path.module}/docker-install.sh"
   }
 
@@ -58,8 +59,7 @@ resource "aws_instance" "instance" {
       "sudo docker run -d -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent",
       "docker login quay.io -u ${var.quay_username} -p ${var.quay_password}",
       "chmod +x ./init.sh",
-      "./init.sh",
-      "sudo docker-compose up -d"
+      "./init.sh"
     ]
   }
 }
@@ -116,8 +116,8 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = [var.sns_topic_arn]
-  ok_actions          = [var.sns_topic_arn]
+  alarm_actions       = var.sns_alarm_enabled==true ? [var.sns_topic_arn] : []
+  ok_actions          = var.sns_alarm_enabled==true ? [var.sns_topic_arn] : []
   treat_missing_data  = "breaching"
 
   dimensions = {

@@ -32,7 +32,7 @@ module "aws-dockercomposehost" {
 ```
 
 By default a custom cloud watch configuration will be used.
-If you want to specify a different one, just give a value to the variable `var.cloudwatch_config_json`
+If you want to specify a different one, just give a value to the variable `var.cloudwatch_agent_config`
 
 Example:
 
@@ -48,7 +48,7 @@ module "aws-dockercomposehost" {
 
   in_open_ports = [80]
 
-  cloudwatch_config_json = file("cwagentconfig.json")
+  cloudwatch_agent_config = "cwagentconfig.json"
 }
 ```
 

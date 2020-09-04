@@ -7,7 +7,7 @@ variable instance_type {
 }
 
 variable ami {
-  description = "Custom AMI, if empty will use latest Ubuntu"
+  description = "Custom AMI, if empty will use latest Ubuntu LTS"
   default     = ""
 }
 
@@ -68,15 +68,21 @@ variable in_source_security_group {
 variable disk_utilization_alarm_threshold {
   description = "Disk occupation alarm threshold (% of disk utilization), for example 80.\nIf not set, the alarm won't be created"
   type        = number
-  default     = 0
+  default     = 80
 }
 
-variable "sns_topic_arn" {
+variable sns_alarm_enabled {
+  description = "Determine if the cloudwatch alarm will be forwarded to the SNS topic provided or not"
+  type = bool
+  default = false
+}
+
+variable sns_topic_alarm_arn {
   type    = string
   default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
 }
 
-variable "cloudwatch_config_json" {
+variable cloudwatch_agent_config {
   type    = string
   default = ""
 }
