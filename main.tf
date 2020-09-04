@@ -50,7 +50,6 @@ resource "aws_instance" "instance" {
       "sudo apt-get install -y docker.io docker-compose",
       "sudo usermod -aG docker $USER"
     ]
-    script = "${path.module}/docker-install.sh"
   }
 
   provisioner "remote-exec" {
