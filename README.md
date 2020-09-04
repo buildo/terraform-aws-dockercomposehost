@@ -70,7 +70,8 @@ These resources are created if their variable is set
 | A Route53 record | zone_id && host_name |
 |   |   |
 
-## Ideas
+## Fixes/Ideas
 
+- Missing data are treated as "breaching", but the cloudwatch agent needs time to begin to collect data. This way the alarm is always triggered. Solutions?
 - Make the provision of copy-and-execute init.sh only if set from variable
 - Isn't better to have directly an AMI built with something (Packer?) with docker and docker-compose installed?
