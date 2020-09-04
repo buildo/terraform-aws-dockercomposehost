@@ -77,7 +77,7 @@ data aws_iam_policy_document "assume_policy" {
       "sts:AssumeRole"
     ]
     effect = "Allow"
-    principals = {
+    principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
