@@ -73,8 +73,8 @@ variable disk_utilization_alarm_threshold {
 
 variable sns_alarm_enabled {
   description = "Determine if the cloudwatch alarm will be forwarded to the SNS topic provided or not"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable sns_topic_alarm_arn {

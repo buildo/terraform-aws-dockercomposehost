@@ -78,25 +78,23 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_role_policy_attachment" {
   role       = aws_iam_role.cloudwatch_role.id
 }
 
-resource "aws_iam_role" "cloudwatch_role" {
-  name = "${var.project_name}-ec2-cloudwatch-role"
-
-  force_detach_policies = true
-
-  assume_role_policy = jsonencode(
-    {
-      Statement = [
-        {
-          Action = "sts:AssumeRole"
-          Effect = "Allow"
-          Principal = {
-            Service = "ec2.amazonaws.com"
-          }
-        },
-      ]
-      Version = "2012-10-17"
+data aws_iam_policy_document "assume_policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+    effect = "Allow"
+    principals = {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
     }
-  )
+  }
+}
+
+resource "aws_iam_role" "cloudwatch_role" {
+  name                  = "${var.project_name}-ec2-cloudwatch-role"
+  force_detach_policies = true
+  assume_role_policy    = data.aws_iam_policy_document.assume_policy.json
 }
 
 resource "aws_iam_instance_profile" "profile" {
@@ -115,8 +113,8 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = var.sns_alarm_enabled==true ? [var.sns_topic_alarm_arn] : []
-  ok_actions          = var.sns_alarm_enabled==true ? [var.sns_topic_alarm_arn] : []
+  alarm_actions       = var.sns_alarm_enabled == true ? [var.sns_topic_alarm_arn] : []
+  ok_actions          = var.sns_alarm_enabled == true ? [var.sns_topic_alarm_arn] : []
   treat_missing_data  = "breaching"
 
   dimensions = {
