@@ -45,7 +45,7 @@ resource "aws_instance" "instance" {
       "sudo apt-get install -y docker.io docker-compose",
       "sudo usermod -aG docker $USER",
       "sudo mv ~/cwagentconfig /etc/cwagentconfig",
-      "docker run -d --restart always -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
+      "sudo docker run -d --restart always -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
     ]
   }
 }
