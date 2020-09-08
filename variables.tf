@@ -51,20 +51,25 @@ variable in_source_security_group {
 }
 
 variable disk_utilization_alarm_threshold {
-  description = "Disk occupation alarm threshold (% of disk utilization), for example 80.\nIf not set, the alarm won't be created"
+  description = "Disk occupation alarm threshold (% of disk utilization), default 80.\n"
   type        = number
   default     = 80
 }
 
 variable sns_alarm_enabled {
-  description = "Determine if the cloudwatch alarm will be forwarded to the SNS topic provided or not"
+  description = "Determine if the cloudwatch alarm will be created or not"
   type        = bool
   default     = true
 }
 
-variable sns_topic_alarm_arn {
+variable alarm_actions {
   type    = string
   default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
+}
+
+variable ok_actions {
+  type    = string
+  default = ""
 }
 
 variable cloudwatch_agent_config {

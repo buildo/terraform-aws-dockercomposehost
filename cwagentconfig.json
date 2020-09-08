@@ -6,19 +6,16 @@
   "metrics": {
     "namespace": "System/Linux",
     "append_dimensions": {
-      "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
-      "ImageId": "${aws:ImageId}",
-      "InstanceId": "${aws:InstanceId}",
-      "InstanceType": "${aws:InstanceType}"
+      "InstanceId": "${aws:InstanceId}"
     },
     "metrics_collected": {
       "disk": {
         "measurement": [
           "used_percent"
         ],
-        "metrics_collection_interval": 30,
+        "metrics_collection_interval": 60,
         "resources": [
-          "*"
+          "/"
         ]
       }
     }

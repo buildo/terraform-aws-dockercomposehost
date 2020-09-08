@@ -41,8 +41,7 @@ resource "aws_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
-      "sudo apt-get -y upgrade",
-      "sudo apt-get install -y docker.io docker-compose",
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o DPkg::options::=\"--force-confdef\" -o DPkg::options::=\"--force-confold\"", "sudo apt-get install -y docker.io docker-compose",
       "sudo usermod -aG docker $USER"
     ]
   }
@@ -50,7 +49,7 @@ resource "aws_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv ~/cwagentconfig /etc/cwagentconfig",
-      "sudo docker run -d -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
+      "docker run -d --restart always -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
     ]
   }
 }
@@ -95,7 +94,7 @@ resource "aws_iam_instance_profile" "profile" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk_full" {
-  count               = var.disk_utilization_alarm_threshold == 0 ? 0 : 1
+  count               = var.sns_alarm_enabled == true ? 1 : 0
   alarm_name          = "${var.project_name}-${aws_instance.instance.id}-disk-full"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -105,8 +104,8 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = var.sns_alarm_enabled == true ? [var.sns_topic_alarm_arn] : []
-  ok_actions          = var.sns_alarm_enabled == true ? [var.sns_topic_alarm_arn] : []
+  alarm_actions       = [var.alarm_actions]
+  ok_actions          = [var.ok_actions]
   treat_missing_data  = "breaching"
 
   dimensions = {
