@@ -106,6 +106,8 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
 
   dimensions = {
     InstanceId = aws_instance.instance.id
-    MountPath  = "/"
+    path       = "/"
+    device     = "overlay"
+    fstype     = "overlay"
   }
 }
