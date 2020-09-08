@@ -41,13 +41,9 @@ resource "aws_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o DPkg::options::=\"--force-confdef\" -o DPkg::options::=\"--force-confold\"", "sudo apt-get install -y docker.io docker-compose",
-      "sudo usermod -aG docker $USER"
-    ]
-  }
-
-  provisioner "remote-exec" {
-    inline = [
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o DPkg::options::=\"--force-confdef\" -o DPkg::options::=\"--force-confold\"",
+      "sudo apt-get install -y docker.io docker-compose",
+      "sudo usermod -aG docker $USER",
       "sudo mv ~/cwagentconfig /etc/cwagentconfig",
       "docker run -d --restart always -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
     ]
@@ -98,19 +94,18 @@ resource "aws_cloudwatch_metric_alarm" "disk_full" {
   alarm_name          = "${var.project_name}-${aws_instance.instance.id}-disk-full"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
-  metric_name         = "DiskSpaceUtilization"
+  metric_name         = "disk_used_percent"
   namespace           = "System/Linux"
   period              = "60"
   statistic           = "Average"
   threshold           = var.disk_utilization_alarm_threshold
   alarm_description   = "This metric monitors disk utilization"
-  alarm_actions       = var.alarm_actions
-  ok_actions          = var.ok_actions
+  alarm_actions       = var.disk_utilization_alarm_actions
+  ok_actions          = var.disk_utilization_alarm_actions
   treat_missing_data  = "breaching"
 
   dimensions = {
     InstanceId = aws_instance.instance.id
     MountPath  = "/"
-    Filesystem = "overlay"
   }
 }

@@ -51,7 +51,7 @@ variable in_source_security_group {
 }
 
 variable disk_utilization_alarm_threshold {
-  description = "Disk occupation alarm threshold (% of disk utilization), default 80.\n"
+  description = "Disk occupation alarm threshold (% of disk utilization), default 80"
   type        = number
   default     = 80
 }
@@ -62,16 +62,10 @@ variable sns_alarm_enabled {
   default     = true
 }
 
-variable alarm_actions {
+variable disk_utilization_alarm_actions {
   description = "ARN of the actions to run when the cloudwatch alarm is triggered"
-  type    = list(string)
-  default = ["arn:aws:sns:eu-west-1:309416224681:bellosguardo"]
-}
-
-variable ok_actions {
-  description = "ARN of the actions to run when the cloudwatch alarm is back to the OK state"
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = ["arn:aws:sns:eu-west-1:309416224681:bellosguardo"]
 }
 
 variable cloudwatch_agent_config {
