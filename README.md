@@ -18,7 +18,7 @@ services:
 main.tf:
 ```hcl
 module "aws-dockercomposehost" {
-  source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git?ref=9-terraform_0_13"
+  source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git"
 
   project_name    = "project-name"
   ssh_key_name    = "existing-key"
