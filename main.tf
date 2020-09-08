@@ -90,7 +90,7 @@ resource "aws_iam_instance_profile" "profile" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk_full" {
-  count               = var.sns_alarm_enabled == true ? 1 : 0
+  count               = var.disk_utilization_alarm_enabled == true ? 1 : 0
   alarm_name          = "${var.project_name}-${aws_instance.instance.id}-disk-full"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"

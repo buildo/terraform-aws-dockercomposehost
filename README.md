@@ -4,8 +4,8 @@ Terraform module for creating AWS EC2 instances with Docker and Docker Compose i
 
 ## Example
 
-docker-compose.yml:
 ```yaml
+# docker-compose.yml
 version: '3'
 
 services:
@@ -15,8 +15,8 @@ services:
       - "80:80"
 ```
 
-main.tf:
 ```hcl
+# main.tf
 module "aws-dockercomposehost" {
   source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git"
 
@@ -35,6 +35,7 @@ If you want to specify a different one, just give a value to the variable `var.c
 Example:
 
 ```hcl
+# main.tf
 module "aws-dockercomposehost" {
   source = "git@github.com:/buildo/terraform-aws-dockercomposehost.git"
 
@@ -62,7 +63,7 @@ These resources are created if their variable is set
 
 | Resource | Variable |
 |---|---|
-| A CloudWatch Alarm for disk space utilization | disk_utilization_alarm_threshold |
+| A CloudWatch Alarm for disk space utilization | disk_utilization_alarm_enabled == true |
 | A Route53 record | zone_id && host_name |
 |   |   |
 

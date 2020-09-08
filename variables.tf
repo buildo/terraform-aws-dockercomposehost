@@ -56,7 +56,7 @@ variable disk_utilization_alarm_threshold {
   default     = 80
 }
 
-variable sns_alarm_enabled {
+variable disk_utilization_alarm_enabled {
   description = "Determine if the cloudwatch alarm will be created or not"
   type        = bool
   default     = true
