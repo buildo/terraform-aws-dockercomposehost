@@ -63,13 +63,15 @@ variable sns_alarm_enabled {
 }
 
 variable alarm_actions {
-  type    = string
-  default = "arn:aws:sns:eu-west-1:309416224681:bellosguardo"
+  description = "ARN of the actions to run when the cloudwatch alarm is triggered"
+  type    = list(string)
+  default = ["arn:aws:sns:eu-west-1:309416224681:bellosguardo"]
 }
 
 variable ok_actions {
-  type    = string
-  default = ""
+  description = "ARN of the actions to run when the cloudwatch alarm is back to the OK state"
+  type    = list(string)
+  default = []
 }
 
 variable cloudwatch_agent_config {
