@@ -30,7 +30,7 @@ resource "aws_instance" "instance" {
   connection {
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file(var.ssh_private_key)
+    private_key = var.ssh_private_key
   }
 
   provisioner "file" {

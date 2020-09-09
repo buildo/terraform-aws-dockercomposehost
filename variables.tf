@@ -18,6 +18,7 @@ variable volume_size {
 
 variable ssh_private_key {
   description = "Used to connect to the instance once created"
+  type        = string
 }
 
 variable ssh_key_name {
