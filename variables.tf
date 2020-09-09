@@ -17,7 +17,7 @@ variable volume_size {
 }
 
 variable ssh_private_key {
-  description = "The contents of an SSH key to use for the connection, used to setup the instance once created. Can be loaded from a file on disk using the file function"
+  description = "The private key material of the key pair associated with the instance"
   type        = string
 }
 
