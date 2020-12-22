@@ -61,7 +61,12 @@ resource "aws_route53_record" "dns" {
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_role_policy_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  for_each = toset(concat(
+    ["arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"],
+    var.instance_profile_policy_arns,
+  ))
+
+  policy_arn = each.key
   role       = aws_iam_role.cloudwatch_role.id
 }
 

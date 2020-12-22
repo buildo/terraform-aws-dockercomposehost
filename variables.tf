@@ -73,3 +73,9 @@ variable cloudwatch_agent_config {
   type    = string
   default = ""
 }
+
+variable instance_profile_policy_arns {
+  description = "A list of IAM policy ARNs to be associated to the instance profile"
+  type        = list(string)
+  default     = []
+}
