@@ -17,7 +17,7 @@ resource "aws_instance" "instance" {
   key_name                    = var.ssh_key_name
   security_groups             = [aws_security_group.sg.name]
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.profile.name
+  iam_instance_profile        = aws_iam_instance_profile.instance.name
 
   tags = {
     Name = var.project_name
@@ -60,14 +60,14 @@ resource "aws_route53_record" "dns" {
   records = [aws_instance.instance.public_ip]
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatch_role_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "instance" {
   for_each = toset(concat(
     ["arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"],
     var.instance_profile_policy_arns,
   ))
 
   policy_arn = each.key
-  role       = aws_iam_role.cloudwatch_role.id
+  role       = aws_iam_role.instance.id
 }
 
 data aws_iam_policy_document "assume_policy" {
@@ -83,15 +83,15 @@ data aws_iam_policy_document "assume_policy" {
   }
 }
 
-resource "aws_iam_role" "cloudwatch_role" {
-  name                  = "${var.project_name}-ec2-cloudwatch-role"
+resource "aws_iam_role" "instance" {
+  name                  = "${var.project_name}-instance-profile"
   force_detach_policies = true
   assume_role_policy    = data.aws_iam_policy_document.assume_policy.json
 }
 
-resource "aws_iam_instance_profile" "profile" {
-  name = "${var.project_name}-cloudwatch-profile"
-  role = aws_iam_role.cloudwatch_role.name
+resource "aws_iam_instance_profile" "instance" {
+  name = var.project_name
+  role = aws_iam_role.instance.name
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk_full" {
