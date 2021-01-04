@@ -56,8 +56,8 @@ These resources are always created:
 - A Security Group
     - A Security Group Rule for port 22/tcp
     - A Security Group Rule for each port / port range specified in variable `in_open_ports`
-- A IAM Role called "${var.project_name}-ec2-cloudwatch-role"
-- A IAM Profile called "${var.project_name}-cloudwatch-profile"
+- A IAM Role called "${var.project_name}-instance-profile"
+- A IAM Profile called "${var.project_name}"
 
 These resources are created if their variable is set
 
