@@ -22,7 +22,7 @@ module "aws-dockercomposehost" {
 
   project_name    = "project-name"
   ssh_key_name    = "existing-key"
-  ssh_private_key = "~/.ssh/id_rsa_aws"
+  ssh_private_key = file("~/.ssh/id_rsa_aws")
 
   in_open_ports = [80]
 }
