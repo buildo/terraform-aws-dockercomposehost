@@ -32,9 +32,9 @@ resource "aws_security_group_rule" "out_all" {
 }
 
 locals {
-  not_ssh_open_ports = "${distinct(compact(
+  not_ssh_open_ports = distinct(compact(
     split(",", replace(join(",", var.in_open_ports), "/,22,|^22,|,22$|^22$|,22-22,|^22-22,|,22-22$|^22-22$/", ","))
-  ))}"
+  ))
 }
 
 resource "aws_security_group_rule" "custom_ports" {
