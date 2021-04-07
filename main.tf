@@ -1,3 +1,15 @@
+/**
+ * # terraform-aws-dockercomposehost
+ *
+ * This module allows you to create a EC2 machine with:
+ *   - docker installed
+ *   - docker-compose installed
+ *   - cloudwatch-agent installed
+ *   - an alarm on disk usage above `disk_utilization_alarm_threshold`%
+ *   - Security groups described just with `in_open_ports` (port 22 open by default)
+ *   - DNS domain on Route53 with `zone_id` and `host_name`
+ */
+
 data "aws_ami" "ami" {
   most_recent = true
   owners      = ["099720109477"]
