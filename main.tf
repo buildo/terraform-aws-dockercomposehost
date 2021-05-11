@@ -19,34 +19,14 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.instance.name
 
+  user_data_base64 = data.template_cloudinit_config.config.rendered
+
   tags = {
     Name = var.project_name
   }
 
   root_block_device {
     volume_size = var.volume_size
-  }
-
-  connection {
-    host        = self.public_ip
-    user        = "ubuntu"
-    private_key = var.ssh_private_key
-  }
-
-  provisioner "file" {
-    source      = coalesce(var.cloudwatch_agent_config, "${path.module}/cwagentconfig.json")
-    destination = "~/cwagentconfig"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o DPkg::options::=\"--force-confdef\" -o DPkg::options::=\"--force-confold\"",
-      "sudo apt-get install -y docker.io docker-compose",
-      "sudo usermod -aG docker $USER",
-      "sudo mv ~/cwagentconfig /etc/cwagentconfig",
-      "sudo docker run -d --restart always -v /etc/cwagentconfig:/etc/cwagentconfig amazon/cloudwatch-agent"
-    ]
   }
 }
 
@@ -70,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "instance" {
   role       = aws_iam_role.instance.id
 }
 
-data aws_iam_policy_document "assume_policy" {
+data "aws_iam_policy_document" "assume_policy" {
   statement {
     actions = [
       "sts:AssumeRole"
