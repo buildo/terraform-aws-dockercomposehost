@@ -19,11 +19,7 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.instance.name
 
-  user_data = templatefile("${path.module}/init.sh", {
-    "cwagentconfig" = file(
-      coalesce(var.cloudwatch_agent_config, "${path.module}/cwagentconfig.json")
-    )
-  })
+  user_data_base64 = data.template_cloudinit_config.config.rendered
 
   tags = {
     Name = var.project_name
