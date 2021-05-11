@@ -22,7 +22,7 @@ data "template_cloudinit_config" "config" {
           owner: root:root
           permissions: '0644'
       runcmd:
-        - [sudo, docker, run, -d, --restart, always, -v, /etc/cwagentconfig:/etc/cwagentconfig, amazon/cloudwatch-agent:1.247347.5b250583]
+        - [sudo, docker, run, -d, --restart, always, -v, /etc/cwagentconfig:/etc/cwagentconfig, amazon/cloudwatch-agent:1.247347.6b250880]
     EOF
   }
 }
